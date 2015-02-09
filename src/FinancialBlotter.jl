@@ -1,9 +1,11 @@
 module FinancialBlotter
 
-using  FinancialSeries, Reexport
-@reexport using  FinancialSeries 
+using Dates
+using TimeSeries
+using  FinancialSeries#, Reexport
+#@reexport using  FinancialSeries
 
-import Base: show, getindex, add!
+import Base: show, getindex#, add!
 
 export Blotter, Portfolio, Account, Trade, tradearray,
        blottercolnames, blotterticker,
@@ -12,7 +14,7 @@ export Blotter, Portfolio, Account, Trade, tradearray,
 
 
 # Phase 2 methods and const
-#        OrderBook, 
+#        OrderBook,
 #        orderbookcolnames, orderbookbidvalues, orderbookoffervalues, orderbooksellvalues, orderbookcovervalues, orderbookticker,
 #        fillorderbook, fillblotter
 
@@ -30,4 +32,4 @@ include("getindex.jl")
 # include("Phase2/trades.jl")
 # include("Phase2/statemachine.jl")
 
-end 
+end
