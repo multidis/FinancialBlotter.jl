@@ -3,7 +3,7 @@ Financial blotter type: keeps track of filled transactions
 for one specific instrument.
 """
 type Blotter <: AbstractTimeSeries
-  ta::TimeArray{Float64,2}
+  series::TimeArray{Float64,2}
   ticker::Ticker
 end
 
@@ -15,8 +15,7 @@ function Blotter(timestamp::Union(Vector{Date}, Vector{DateTime}),
                  colnames::Vector{ASCIIString},
                  ticker::Ticker)
   # utilize TimeArray inner-constructor checks
-  return Blotter(TimeArray(timestamp, [0.0 0.0], blottercolnames),
-                 ticker)
+  return Blotter(TimeArray(timestamp, values, colnames), ticker)
 end
 
 "Standard blotter columns for filled transactions"
@@ -62,4 +61,3 @@ function Blotter(signal::TimeArray{Bool,1}, fts::FinancialTimeSeries{Float64,2};
 
    Blotter(datetimes, [qty fills.values], blottercolnames, fts.instrument.ticker)
 end
-
