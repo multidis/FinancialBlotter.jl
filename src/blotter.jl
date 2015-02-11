@@ -1,37 +1,42 @@
+"""
+Financial blotter type: keeps track of filled transactions
+for one specific instrument.
+"""
 type Blotter <: AbstractTimeSeries
-
-    timestamp::Vector{Date}
-    values::Matrix{Float64}
-    colnames::Vector{ASCIIString}
-    ticker::Ticker
-
-    function Blotter(timestamp::Vector{Date}, 
-                    values::Matrix{Float64},
-                    colnames::Vector{ASCIIString},
-                    ticker::Ticker)
-
-                    nrow, ncol = size(values, 1), size(values, 2)
-                    nrow != size(timestamp, 1) ? error("values must match length of timestamp"):
-                    ncol != size(colnames,1) ? error("column names must match width of array"):
-                    timestamp != unique(timestamp) ? error("there are duplicate dates"):
-                    ~(flipud(timestamp) == sort(timestamp) || timestamp == sort(timestamp)) ? error("dates are mangled"):
-                    flipud(timestamp) == sort(timestamp) ? 
-                    new(flipud(timestamp), flipud(values), colnames):
-                    new(timestamp, values, colnames, ticker)
-    end
+  ta::TimeArray{Float64,2}
+  ticker::Ticker
 end
 
+"""
+Blotter type outer constructor with `TimeArray` components.
+"""
+function Blotter(timestamp::Union(Vector{Date}, Vector{DateTime}),
+                 values::Matrix{Float64},
+                 colnames::Vector{ASCIIString},
+                 ticker::Ticker)
+  # utilize TimeArray inner-constructor checks
+  return Blotter(TimeArray(timestamp, [0.0 0.0], blottercolnames),
+                 ticker)
+end
+
+"Standard blotter columns for filled transactions"
 const blottercolnames = ["Qty", "Fill"]
+
 const blotterticker   = Ticker("ticker")
 
-Blotter() = Blotter([datetime(1795,10,31)], [0. 0], blottercolnames, blotterticker)
+Blotter() = Blotter([DateTime(1795,10,31)], [0.0 0.0], blottercolnames, blotterticker)
 
 # this probably blows up if you try to insert vs add the end
-add!(b::Blotter, entry::Blotter) = Blotter(vcat(b.timestamp, entry.timestamp), vcat(b.values, entry.values), blottercolnames, blotterticker)
+#add!(b::Blotter, entry::Blotter) = Blotter(vcat(b.timestamp, entry.timestamp), vcat(b.values, entry.values), blottercolnames, blotterticker)
 
-function Blotter(signal::TimeArray{Bool,1}, fts::FinancialTimeSeries{Float64,2}; quantity = 100, price = "open", slippage = .1)
-
-    op, cl = fts["Open"], fts["Close"]
+"""
+Backtesting blotter for instrument series `fts` based on `signal`.
+...
+Returns `Blotter`-object.
+"""
+function Blotter(signal::TimeArray{Bool,1}, fts::FinancialTimeSeries{Float64,2};
+                 quantity = 100, price = "open", slippage = .1)
+  op, cl = fts["Open"], fts["Close"]
     tt = lag(signal)              # 495 row of bools, the next day
     t  = discretesignal(tt)  # 78 rows of first true and first false, as floats though
 

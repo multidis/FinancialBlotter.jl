@@ -1,9 +1,9 @@
 # This code needs to be reduced by several fold, storing it here for now
 
 ###########################  Account
- 
+
 function show(io::IO, ta::Account)
-  # variables 
+  # variables
   nrow          = size(ta.values, 1)
   ncol          = size(ta.values, 2)
   intcatcher    = falses(ncol)
@@ -32,7 +32,7 @@ function show(io::IO, ta::Account)
      print_with_color(:magenta, io, ta.colnames[p], ^(" ", colwidth[p] - strwidth(ta.colnames[p]) + 2))
    end
    println(io,"")
- 
+
   # timestamp and values line
     if nrow > 7
         for i in 1:4
@@ -72,9 +72,9 @@ function show(io::IO, ta::Account)
 end
 
 # ###########################  FinancialTimeSeries
-#  
+#
 # function show(io::IO, ft::FinancialTimeSeries)
-#   # variables 
+#   # variables
 #   nrow          = size(ft.values, 1)
 #   ncol          = size(ft.values, 2)
 #   intcatcher    = falses(ncol)
@@ -90,20 +90,20 @@ end
 #       for m in 1:ncol
 #           push!(colwidth, max(strwidth(ft.colnames[m]), strwidth(@sprintf("%.2f", maximum(ft.values[:,m])))))
 #       end
-# 
+#
 #   # summary line
 #   print(io,@sprintf("%dx%d %s %s to %s", nrow, ncol, typeof(ft), string(ft.timestamp[1]), string(ft.timestamp[nrow])))
 #   println(io,"")
 #   println(io,"")
-# 
+#
 #   # row label line
 #    print(io, ^(" ", spacetime), ft.colnames[1], ^(" ", colwidth[1] + 2 -firstcolwidth))
-# 
+#
 #    for p in 2:length(colwidth)
 #      print(io, ft.colnames[p], ^(" ", colwidth[p] - strwidth(ft.colnames[p]) + 2))
 #    end
 #    println(io,"")
-#  
+#
 #   # timesftmp and values line
 #     if nrow > 7
 #         for i in 1:4
@@ -139,9 +139,10 @@ end
 # end
 
 ###########################  Blotter
- 
-function show(io::IO, ta::Blotter)
-  # variables 
+
+function show(io::IO, fb::Blotter)
+  ta = fb.ta
+  # variables
   nrow          = size(ta.values, 1)
   ncol          = size(ta.values, 2)
   intcatcher    = falses(ncol)
@@ -159,6 +160,7 @@ function show(io::IO, ta::Blotter)
       end
 
   # summary line
+  print(io,@sprintf("Financial blotter for ticker: *** %s ***\n", string(fb.ticker)))
   print(io,@sprintf("%dx%d %s %s to %s", nrow, ncol, typeof(ta), string(ta.timestamp[1]), string(ta.timestamp[nrow])))
   println(io,"")
   println(io,"")
@@ -170,7 +172,7 @@ function show(io::IO, ta::Blotter)
      print_with_color(:magenta, io, ta.colnames[p], ^(" ", colwidth[p] - strwidth(ta.colnames[p]) + 2))
    end
    println(io,"")
- 
+
   # timestamp and values line
     if nrow > 7
         for i in 1:4
@@ -212,7 +214,7 @@ end
 ###########################  Portfolio
 
 function show(io::IO, ta::Portfolio)
-  # variables 
+  # variables
   nrow          = size(ta.values, 1)
   ncol          = size(ta.values, 2)
   intcatcher    = falses(ncol)
@@ -241,7 +243,7 @@ function show(io::IO, ta::Portfolio)
      print_with_color(:magenta, io, ta.colnames[p], ^(" ", colwidth[p] - strwidth(ta.colnames[p]) + 2))
    end
    println(io,"")
- 
+
   # timestamp and values line
     if nrow > 7
         for i in 1:4
@@ -281,23 +283,23 @@ function show(io::IO, ta::Portfolio)
 end
 
 # ########################### Instrument
-# 
+#
 # function show(io::IO, c::CUSIP)
 #     print(io, @sprintf("%s", c.id))
 # end
-# 
+#
 # function show(io::IO, c::ReutersID)
 #     print(io, @sprintf("%s", c.id))
 # end
-# 
+#
 # function show(io::IO, c::BloombergID)
 #     print(io, @sprintf("%s", c.id))
 # end
-# 
+#
 # function show(io::IO, t::Ticker)
 #     print(io, @sprintf("%s", t.id))
 # end
-# 
+#
 # function show(io::IO, s::Stock)
 #     println(io, @sprintf("ticker:         %s", s.ticker))
 # #    println(io, @sprintf("cusip:          %s", s.cusip))
@@ -305,11 +307,11 @@ end
 #     println(io, @sprintf("tick:           %s", s.tick))
 #     println(io, @sprintf("multiplier:     %s", s.multiplier))
 # end
-# 
+#
 # function show(io::IO, c::Currency)
 #     print(io, @sprintf("%s", c.origin))
 # end
-# 
+#
 # function show(io::IO, c::CurrencyPair)
 #     print(io, @sprintf("%s/%s", string(c.baseside), string(c.quoteside)))
 # end

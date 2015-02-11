@@ -1,17 +1,25 @@
 module FinancialBlotter
 
-using Dates
-using TimeSeries
-using  FinancialSeries#, Reexport
-#@reexport using  FinancialSeries
+# documentation
+using Docile
 
-import Base: show, getindex#, add!
+if VERSION < v"0.4-"
+  using Dates
+else
+  using Base.Dates
+end
+using Reexport
+@reexport using TimeSeries, FinancialSeries
+
+import Base: show, getindex #, add!
+
+@document
 
 export Blotter, Portfolio, Account, Trade, tradearray,
        blottercolnames, blotterticker,
-       add!, merge, parsedatetime, parsedatetime1, parsedatetime_from_TOS, makedatetime, datetolastsecond, discretesignal,
+       #add!,
+       merge, parsedatetime, parsedatetime1, parsedatetime_from_TOS, makedatetime, datetolastsecond, discretesignal,
        startedtrades, closedtrades
-
 
 # Phase 2 methods and const
 #        OrderBook,
