@@ -25,8 +25,14 @@ const blotterticker   = Ticker("ticker")
 
 Blotter() = Blotter([DateTime(1795,10,31)], [0.0 0.0], blottercolnames, blotterticker)
 
+
+
+### TODO use push! or other non-deprecated Base-method
+
 # this probably blows up if you try to insert vs add the end
 #add!(b::Blotter, entry::Blotter) = Blotter(vcat(b.timestamp, entry.timestamp), vcat(b.values, entry.values), blottercolnames, blotterticker)
+
+
 
 """
 Backtesting blotter for instrument series `fts` based on `signal`.
